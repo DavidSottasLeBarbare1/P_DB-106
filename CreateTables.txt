@@ -1,0 +1,90 @@
+CREATE TABLE t_client(
+   client_id INT,
+   nom VARCHAR(50),
+   prenom VARCHAR(50),
+   email VARCHAR(50),
+   telephone VARCHAR(50),
+   PRIMARY KEY(client_id)
+);
+
+CREATE TABLE t_article(
+   article_id INT,
+   type VARCHAR(50),
+   nom VARCHAR(50),
+   prix_ttc DECIMAL(19,4),
+   tva DECIMAL(15,2),
+   actif BOOLEAN,
+   PRIMARY KEY(article_id)
+);
+
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE t_livreur(
+   livreur_id INT,
+   nom VARCHAR(50),
+   actif BOOLEAN,
+   PRIMARY KEY(livreur_id)
+);
+
+CREATE TABLE t_adresse(
+   adresse_id INT,
+   rue VARCHAR(50),
+   NPA INT,
+   localite VARCHAR(50),
+   latitude FLOAT,
+   longitude FLOAT,
+   client_fk INT NOT NULL,
+   PRIMARY KEY(adresse_id),
+   FOREIGN KEY(client_fk) REFERENCES t_client(client_id)
+);
+
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE t_commande(
+   commande_id INT,
+   date_heure DATETIME,
+   type VARCHAR(50),
+   montant DECIMAL(19,4),
+   statut VARCHAR(50),
+   adresse_fk INT,
+   client_fk INT NOT NULL,
+   PRIMARY KEY(commande_id),
+   FOREIGN KEY(adresse_fk) REFERENCES t_adresse(adresse_id),
+   FOREIGN KEY(client_fk) REFERENCES t_client(client_id)
+);
+
+CREATE TABLE t_paiement(
+   paiement_id INT,
+   mode VARCHAR(50),
+   montant_paye VARCHAR(50),
+   date_paiement VARCHAR(50),
+   commande_fk INT NOT NULL,
+   PRIMARY KEY(paiement_id),
+   FOREIGN KEY(commande_fk) REFERENCES t_commande(commande_id)
+);
+
+CREATE TABLE t_ligne_commande(
+   lignedecommande_id INT,
+   quantite INT,
+   prix_unitaire DECIMAL(19,4),
+   eventuelstoppings VARCHAR(50),
+   parent_ligne_fk INT,
+   article_fk INT NOT NULL,
+   commande_fk INT NOT NULL,
+   PRIMARY KEY(lignedecommande_id),
+   UNIQUE(parent_ligne_fk),
+   FOREIGN KEY(parent_ligne_fk) REFERENCES t_ligne_commande(lignedecommande_id),
+   FOREIGN KEY(article_fk) REFERENCES t_article(article_id),
+   FOREIGN KEY(commande_fk) REFERENCES t_commande(commande_id)
+);
+
+CREATE TABLE t_livraison(
+   livraison_id INT,
+   date_depart DATETIME,
+   date_arrivee DATETIME,
+   distance DECIMAL(15,2),
+   statut VARCHAR(50),
+   commande_fk INT NOT NULL,
+   livreur_fk INT NOT NULL,
+   PRIMARY KEY(livraison_id),
+   FOREIGN KEY(commande_fk) REFERENCES t_commande(commande_id),
+   FOREIGN KEY(livreur_fk) REFERENCES t_livreur(livreur_id)
+);
