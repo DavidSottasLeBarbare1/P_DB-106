@@ -1,16 +1,6 @@
-DROP TABLE IF EXISTS t_client;
-CREATE TABLE t_client(
-   client_id INT,
-   nom VARCHAR(50),
-   prenom VARCHAR(50),
-   email VARCHAR(50),
-   telephone VARCHAR(50),
-   PRIMARY KEY(client_id)
-);
-
 DROP TABLE IF EXISTS t_article;
 CREATE TABLE t_article(
-   article_id INT,
+   article_id INT AUTO_INCREMENT,
    type ENUM('pizza' , 'topping' , 'boisson' , 'dessert'),
    nom VARCHAR(50),
    prix_ttc DECIMAL(19,4),
@@ -21,15 +11,25 @@ CREATE TABLE t_article(
 
 DROP TABLE IF EXISTS t_livreur;
 CREATE TABLE t_livreur(
-   livreur_id INT,
+   livreur_id INT AUTO_INCREMENT,
    nom VARCHAR(50),
    actif BOOLEAN,
    PRIMARY KEY(livreur_id)
 );
 
+DROP TABLE IF EXISTS t_client;
+CREATE TABLE t_client(
+   client_id INT AUTO_INCREMENT,
+   nom VARCHAR(50),
+   prenom VARCHAR(50),
+   email VARCHAR(50),
+   telephone VARCHAR(50),
+   PRIMARY KEY(client_id)
+);
+
 DROP TABLE IF EXISTS t_adresse;
 CREATE TABLE t_adresse(
-   adresse_id INT,
+   adresse_id INT AUTO_INCREMENT,
    rue VARCHAR(50),
    npa INT,
    localite VARCHAR(50),
@@ -43,7 +43,7 @@ CREATE TABLE t_adresse(
 /*!50503 SET character_set_client = utf8mb4 */;
 DROP TABLE IF EXISTS t_commande;
 CREATE TABLE t_commande(
-   commande_id INT,
+   commande_id INT AUTO_INCREMENT,
    date_creation DATETIME,
    type ENUM('emporter' , 'sur_place' , 'livraison'),
    montant DECIMAL(19,4),
@@ -55,9 +55,10 @@ CREATE TABLE t_commande(
    FOREIGN KEY(client_fk) REFERENCES t_client(client_id)
 );
 
+
 DROP TABLE IF EXISTS t_paiement;
 CREATE TABLE t_paiement(
-   paiement_id INT,
+   paiement_id INT AUTO_INCREMENT,
    mode ENUM('twint' , 'carte' , 'cash', 'bon'),
    montant VARCHAR(50),
    date_paiement VARCHAR(50),
@@ -66,10 +67,10 @@ CREATE TABLE t_paiement(
    FOREIGN KEY(commande_fk) REFERENCES t_commande(commande_id)
 );
 
-	
+
 DROP TABLE IF EXISTS t_ligne_commande;
 CREATE TABLE t_ligne_commande(
-   lignedecommande_id INT,
+   lignedecommande_id INT AUTO_INCREMENT,
    quantite INT,
    prix_unitaire DECIMAL(19,4),
    eventuelstoppings VARCHAR(50),
@@ -85,7 +86,7 @@ CREATE TABLE t_ligne_commande(
 
 DROP TABLE IF EXISTS t_livraison;
 CREATE TABLE t_livraison(
-   livraison_id INT,
+   livraison_id INT AUTO_INCREMENT,
    date_depart DATETIME,
    date_arrivee DATETIME,
    distance DECIMAL(15,2),

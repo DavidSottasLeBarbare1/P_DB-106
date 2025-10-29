@@ -1,5 +1,5 @@
 /*
-Requète 1 : 
+Requête 1 : 
 "SELECT c.commande_id, c.date_creation, c.statut, cl.nom AS client
 FROM t_commande AS c
 JOIN t_client AS cl ON c.client_fk = cl.client_id
@@ -16,7 +16,7 @@ CREATE INDEX commande_client_fk_idx
 ON t_commande (client_fk);
 
 /*
-Requète 2 : 
+Requête 2 : 
 "SELECT a.npa AS zone_npa, COUNT(c.commande_id) AS nb
 FROM t_commande AS c
 JOIN t_adresse AS a ON c.adresse_livraison_fk = a.adresse_id
