@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS t_client;
 CREATE TABLE t_client(
    client_id INT,
    nom VARCHAR(50),
@@ -7,9 +8,10 @@ CREATE TABLE t_client(
    PRIMARY KEY(client_id)
 );
 
+DROP TABLE IF EXISTS t_article;
 CREATE TABLE t_article(
    article_id INT,
-   type VARCHAR(50),
+   type ENUM('pizza' , 'topping' , 'boisson' , 'dessert'),
    nom VARCHAR(50),
    prix_ttc DECIMAL(19,4),
    tva DECIMAL(15,2),
@@ -17,7 +19,7 @@ CREATE TABLE t_article(
    PRIMARY KEY(article_id)
 );
 
-/*!50503 SET character_set_client = utf8mb4 */;
+DROP TABLE IF EXISTS t_livreur;
 CREATE TABLE t_livreur(
    livreur_id INT,
    nom VARCHAR(50),
@@ -25,10 +27,11 @@ CREATE TABLE t_livreur(
    PRIMARY KEY(livreur_id)
 );
 
+DROP TABLE IF EXISTS t_adresse;
 CREATE TABLE t_adresse(
    adresse_id INT,
    rue VARCHAR(50),
-   NPA INT,
+   npa INT,
    localite VARCHAR(50),
    latitude FLOAT,
    longitude FLOAT,
@@ -38,12 +41,13 @@ CREATE TABLE t_adresse(
 );
 
 /*!50503 SET character_set_client = utf8mb4 */;
+DROP TABLE IF EXISTS t_commande;
 CREATE TABLE t_commande(
    commande_id INT,
-   date_heure DATETIME,
-   type VARCHAR(50),
+   date_creation DATETIME,
+   type ENUM('emporter' , 'sur_place' , 'livraison'),
    montant DECIMAL(19,4),
-   statut VARCHAR(50),
+   statut ENUM('reçue' , 'en_preparation' , 'en_livraison', 'livrée', 'annulée'),
    adresse_fk INT,
    client_fk INT NOT NULL,
    PRIMARY KEY(commande_id),
@@ -51,16 +55,19 @@ CREATE TABLE t_commande(
    FOREIGN KEY(client_fk) REFERENCES t_client(client_id)
 );
 
+DROP TABLE IF EXISTS t_paiement;
 CREATE TABLE t_paiement(
    paiement_id INT,
-   mode VARCHAR(50),
-   montant_paye VARCHAR(50),
+   mode ENUM('twint' , 'carte' , 'cash', 'bon'),
+   montant VARCHAR(50),
    date_paiement VARCHAR(50),
    commande_fk INT NOT NULL,
    PRIMARY KEY(paiement_id),
    FOREIGN KEY(commande_fk) REFERENCES t_commande(commande_id)
 );
 
+	
+DROP TABLE IF EXISTS t_ligne_commande;
 CREATE TABLE t_ligne_commande(
    lignedecommande_id INT,
    quantite INT,
@@ -76,12 +83,13 @@ CREATE TABLE t_ligne_commande(
    FOREIGN KEY(commande_fk) REFERENCES t_commande(commande_id)
 );
 
+DROP TABLE IF EXISTS t_livraison;
 CREATE TABLE t_livraison(
    livraison_id INT,
    date_depart DATETIME,
    date_arrivee DATETIME,
    distance DECIMAL(15,2),
-   statut VARCHAR(50),
+   statut ENUM('recue' , 'en_preparation' , 'en_livraison', 'livree', 'annulee'),
    commande_fk INT NOT NULL,
    livreur_fk INT NOT NULL,
    PRIMARY KEY(livraison_id),
