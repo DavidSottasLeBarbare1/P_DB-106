@@ -9,15 +9,14 @@ GRANT CREATE USER, DROP, GRANT OPTION ON *.* TO 'admin';
 /*Création du role "manager"*/
 CREATE ROLE 'manager';
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON db_thanos_pizza.t_commande, db_thanos_pizza.t_livraison, db_thanos_pizza.t_article TO 'manager';
+GRANT SELECT, INSERT, UPDATE, DELETE ON db_thanos_pizza.t_livraison, db_thanos_pizza.t_article TO 'manager';
+GRANT SELECT, INSERT, DELETE ON db_thanos_pizza.t_commande to 'manager';
 GRANT SELECT ON db_thanos_pizza.t_paiement TO 'manager';
 
 /*Création du role "pizzaiolo"*/
 CREATE ROLE 'pizzaiolo';
 
 GRANT SELECT ON db_thanos_pizza.t_commande TO 'pizzaiolo';
-GRANT UPDATE (statut) ON db_thanos_pizza.t_commande TO 'pizzaiolo';
-GRANT SELECT, UPDATE ON db_thanos_pizza.t_ligne_commande TO 'pizzaiolo';
 
 /*Création du role "livreur"*/
 CREATE ROLE 'livreur';
