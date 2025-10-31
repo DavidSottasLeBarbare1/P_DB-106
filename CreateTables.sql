@@ -1,3 +1,10 @@
+/*Creating the database*/
+Create database db_thanos_pizza;
+
+/*Using the database*/
+Use db_thanos_pizza;
+
+/*Creation of every tables*/
 DROP TABLE IF EXISTS t_article;
 CREATE TABLE t_article(
    article_id INT AUTO_INCREMENT,
@@ -46,8 +53,7 @@ CREATE TABLE t_commande(
    commande_id INT AUTO_INCREMENT,
    date_creation DATETIME,
    type ENUM('emporter' , 'sur_place' , 'livraison'),
-   montant DECIMAL(19,4),
-   statut ENUM('reçue' , 'en_preparation' , 'en_livraison', 'livrée', 'annulée'),
+   statut ENUM('reçue' , 'en_preparation' , 'en_livraison', 'livree', 'annulee'),
    adresse_fk INT,
    client_fk INT NOT NULL,
    PRIMARY KEY(commande_id),
@@ -70,16 +76,15 @@ CREATE TABLE t_paiement(
 
 DROP TABLE IF EXISTS t_ligne_commande;
 CREATE TABLE t_ligne_commande(
-   lignedecommande_id INT AUTO_INCREMENT,
+   ligne_id INT AUTO_INCREMENT,
    quantite INT,
    prix_unitaire DECIMAL(19,4),
    eventuelstoppings VARCHAR(50),
    parent_ligne_fk INT,
    article_fk INT NOT NULL,
    commande_fk INT NOT NULL,
-   PRIMARY KEY(lignedecommande_id),
-   UNIQUE(parent_ligne_fk),
-   FOREIGN KEY(parent_ligne_fk) REFERENCES t_ligne_commande(lignedecommande_id),
+   PRIMARY KEY(ligne_id),
+   FOREIGN KEY(parent_ligne_fk) REFERENCES t_ligne_commande(ligne_id),
    FOREIGN KEY(article_fk) REFERENCES t_article(article_id),
    FOREIGN KEY(commande_fk) REFERENCES t_commande(commande_id)
 );

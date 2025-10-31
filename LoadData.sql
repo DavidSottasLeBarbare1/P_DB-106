@@ -1,3 +1,8 @@
+/*Changing variables*/
+SET FOREIGN_KEY_CHECKS = 0;
+SET GLOBAL local_infile = 'ON';
+
+/*Loading every tsv files into the database*/
 LOAD DATA LOCAL INFILE '/scripts/t_client.tsv'
 INTO TABLE t_client
 FIELDS TERMINATED BY '\t'
@@ -29,9 +34,11 @@ IGNORE 1 LINES
 LOAD DATA LOCAL INFILE '/scripts/t_commande.tsv'
 INTO TABLE t_commande
 FIELDS TERMINATED BY '\t'
-LINES TERMINATED BY '\n'
+LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES
-(commande_id, client_fk, type, adresse_fk, date_creation, statut);
+(commande_id, client_fk, type, @adresse_fk, date_creation, @statut)
+SET adresse_fk = NULLIF(@adresse_fk, ''),
+    statut = TRIM(@statut);
 
 LOAD DATA LOCAL INFILE '/scripts/t_ligne_commande.tsv'
 INTO TABLE t_ligne_commande
